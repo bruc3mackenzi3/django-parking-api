@@ -51,8 +51,14 @@ curl -X PUT -d '{"rates": [{"days": "wedn", "times": "0600-1800", "tz": "America
 
 ### GET rates
 ```bash
-# Valid
+# 1750 parking rate
 curl "http://127.0.0.1:8000/parking_rates?start=2015-07-01T07:00:00-05:00&end=2015-07-01T12:00:00-05:00"
+
+# 2000 parking rate
+curl "http://127.0.0.1:8000/parking_rates?start=2015-07-04T15:00:00+00:00&end=2015-07-04T20:00:00+00:00"
+
+# Unavailable parking rate
+curl "http://127.0.0.1:8000/parking_rates?start=2015-07-04T07:00:00+05:00&end=2015-07-04T20:00:00+05:00"
 
 # Invalid date
 curl "http://127.0.0.1:8000/parking_rates?start=2015-07-99T07:00:00-05:00&end=2015-07-01T12:00:00-05:00"
