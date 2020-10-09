@@ -3,6 +3,7 @@ import logging
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.views.generic import View
 
+from parking_app.lib.rates import ParkingRates
 from parking_app.lib.validator import validate_get_parking, validate_put_parking
 
 
@@ -28,17 +29,21 @@ class ParkingView(View):
                     status=400
             )
 
-        return JsonResponse({'rate': 1750})
+        price = ParkingRates.get_rate_price(start, end)
+
+        return JsonResponse({'rate': price})
 
     def put(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         try:
             rates = validate_put_parking(request.body)
         except Exception as e:
-            logger.error(f"Failed to request body: {e}")
+            logger.error(f"Failed to load request body: {e}")
             return JsonResponse(
                     {'error': f'Invalid JSON in body: {e}'},
                     status=400
             )
+
+        ParkingRates.load_rates(rates)
 
         # Return 201 if data has not been set, 200 otherwise
         return HttpResponse('This is PUT request', status=201)
