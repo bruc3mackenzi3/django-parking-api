@@ -37,11 +37,20 @@ python manage.py startapp parking_app
 ```
 
 ## Testing
+### PUT rates
 ```bash
-# Update rates
-Invoke-WebRequest
+# Load from valid rates file
 curl -X PUT -H "Content-Type: application/json" -d @parking_app/data/rates.json  "http://127.0.0.1:8000/parking_rates"
 
+# JSON with single rate
+curl -X PUT -d '{"rates": [{"days": "wed", "times": "0600-1800", "tz": "America/Chicago", "price": 1750}]}'  "http://127.0.0.1:8000/parking_rates"
+
+# Invalid day
+curl -X PUT -d '{"rates": [{"days": "wedn", "times": "0600-1800", "tz": "America/Chicago", "price": 1750}]}'  "http://127.0.0.1:8000/parking_rates"
+```
+
+### GET rates
+```bash
 # Valid
 curl "http://127.0.0.1:8000/parking_rates?start=2015-07-01T07:00:00-05:00&end=2015-07-01T12:00:00-05:00"
 
