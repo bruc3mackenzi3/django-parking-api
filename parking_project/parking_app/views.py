@@ -12,6 +12,12 @@ logger = logging.getLogger(__name__)
 
 class ParkingView(View):
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        if not ParkingRates.rates_loaded():
+            logger.error("Unable to process query, parking rates not yet loaded.")
+            return JsonResponse(
+                    {"error": "Parking rates not yet loaded"},
+                    status=503
+            )
         start_arg = request.GET.get("start")
         end_arg = request.GET.get("end")
         if None in [start_arg, end_arg]:
@@ -58,7 +64,7 @@ class ParkingView(View):
                     status=400
             )
 
-        return HttpResponse("This is PUT request", status=return_status)
+        return HttpResponse("", status=return_status)
 
 
 def health(request: HttpRequest) -> HttpResponse:
