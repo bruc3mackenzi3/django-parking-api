@@ -1,8 +1,9 @@
 from datetime import datetime
 import json
+from typing import Tuple
 
 
-def validate_get_parking(start: str, end: str) -> tuple[datetime, datetime]:
+def validate_get_parking(start: str, end: str) -> Tuple[datetime, datetime]:
     """
     Validates the input parameters and returns the parsed result.
 
