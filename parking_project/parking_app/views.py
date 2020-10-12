@@ -7,13 +7,15 @@ from parking_app.lib.rates import ParkingRates
 from parking_app.lib.validator import validate_get_parking, validate_put_parking
 
 
-logger = logging.getLogger(__name__)
-
-
 class ParkingView(View):
+
+    def __init__(self, *args, **kwargs):
+        self.logger = logging.getLogger(ParkingView.__name__)
+        super(ParkingView, self).__init__(*args, **kwargs)
+
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         if not ParkingRates.rates_loaded():
-            logger.error("Unable to process query, parking rates not yet loaded.")
+            self.logger.error("Unable to process query, parking rates not yet loaded.")
             return JsonResponse(
                     {"error": "Parking rates not yet loaded"},
                     status=503
@@ -29,7 +31,7 @@ class ParkingView(View):
         try:
             start, end = validate_get_parking(start_arg, end_arg)
         except Exception as e:
-            logger.error(f"Failed to validate query string parameters: {e}")
+            self.logger.error(f"Failed to validate query string parameters: {e}")
             return JsonResponse(
                     {"error": f"Invalid start/end dates: {e}"},
                     status=400
@@ -49,7 +51,7 @@ class ParkingView(View):
         try:
             rates_dict = validate_put_parking(request.body)
         except Exception as e:
-            logger.error(f"Failed to load request body: {e}")
+            self.logger.error(f"Failed to load request body: {e}")
             return JsonResponse(
                     {"error": f"Invalid JSON in body: {e}"},
                     status=400
@@ -58,7 +60,7 @@ class ParkingView(View):
         try:
             ParkingRates.load_rates(rates_dict)
         except Exception as e:
-            logger.error(f"Error loading rates objects: {e}")
+            self.logger.error(f"Error loading rates objects: {e}")
             return JsonResponse(
                     {"error": f"Invalid field in rates: {e}"},
                     status=400

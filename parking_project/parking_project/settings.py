@@ -121,13 +121,14 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Modified by Bruce
-import logging
 LOGGING = {
     'version': 1,
+    'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
             'class': 'logging.Formatter',
-            'format': '%(asctime)s %(name)-15s %(levelname)-8s %(processName)-10s %(message)s'
+            'format': '%(asctime)s %(name)-15s %(levelname)-8s %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
         }
     },
     'handlers': {
@@ -139,8 +140,6 @@ LOGGING = {
     },
     'root': {
         'handlers': ['console'],
-        'level': logging.INFO
+        'level': 'INFO'
     }
 }
-from logging.config import dictConfig
-dictConfig(LOGGING)
