@@ -29,7 +29,7 @@ def validate_get_parking(start: str, end: str) -> Tuple[datetime, datetime]:
     if (end_datetime.date() - start_datetime.date()).days >= 1:
         raise ValueError(f"Time span cannot span multiple days: {start_datetime.date()} != {end_datetime.date()}")
 
-    return [start_datetime, end_datetime]
+    return (start_datetime, end_datetime)
 
 
 def validate_put_parking(body: str) -> dict:

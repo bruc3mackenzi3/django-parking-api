@@ -25,7 +25,9 @@ SECRET_KEY = 'tbg_36w2@199lf-m&g_#i@*+s+^!ptt*%8!fhyzj2yaw9n4-20'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+# Allow all hosts to enable running in Docker container
+# NOTE: This is for development purposes only
+ALLOWED_HOSTS = ['*'] # NOTE: Modified by Bruce
 
 
 # Application definition
@@ -43,7 +45,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # Modified by Bruce
+    # NOTE: Modified by Bruce
     #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -120,7 +122,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Modified by Bruce
+# NOTE: Modified by Bruce
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
