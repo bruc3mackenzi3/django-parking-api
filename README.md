@@ -1,6 +1,7 @@
 # django-parking-api
 
 ## Build Instructions
+### Local
 This project is built using Pipenv.  Install Pipenv with the following command:
 
 ```
@@ -11,6 +12,12 @@ Build project with the command:
 
 ```
 pipenv sync --dev
+```
+
+### Docker
+From project root folder:
+```
+docker build -t parking_api .
 ```
 
 ## Run Instructions
@@ -24,7 +31,7 @@ Create Django project (run from project root folder):
 ```
 django-admin startproject parking_project
 ```
-Note: This creates nested folders, both named `parking_project`
+Note: This creates nested folders both named `parking_project`
 
 Setup project Database (run from _outer_ parking_project/ folder):
 ```
@@ -33,7 +40,7 @@ python manage.py migrate
 
 Create Django app (run from _outer_ parking_project/ folder):
 ```
-python manage.py startapp parking_app
+python manage.py startapp parking_app [port] [--noreload]
 ```
 
 ## Testing
