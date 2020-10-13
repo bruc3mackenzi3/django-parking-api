@@ -1,7 +1,6 @@
 # django-parking-api
 
-## Build Instructions
-### Local
+## Building and Running Locally
 This project is built using Pipenv.  Install Pipenv with the following command:
 
 ```
@@ -9,22 +8,28 @@ pip install pipenv
 ```
 
 Build project with the command:
-
 ```
 pipenv sync --dev
 ```
 
-### Docker
-From project root folder:
+To run the Django web server (default port is 8000):
+```
+python manage.py runserver [port] [--noreload]
+```
+
+## Building and Running with Docker
+Run commands from project root folder.
+
+To build the container image:
 ```
 docker build -t parking_api .
 ```
 
-## Run Instructions
-To run the Django web server:
+To run the container:
 ```
-python manage.py runserver [port] [--noreload]
+docker run -it -p 8000:8000 parking_api
 ```
+
 
 ## Project Setup
 Create Django project (run from project root folder):
@@ -41,6 +46,11 @@ python manage.py migrate
 Create Django app (run from _outer_ parking_project/ folder):
 ```
 python manage.py startapp parking_app [port] [--noreload]
+```
+
+Generate requirements.txt
+```
+pipenv lock -r > requirements-pipenv.txt
 ```
 
 ## Testing
