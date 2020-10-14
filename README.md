@@ -36,6 +36,8 @@ docker run -it -p 8000:8000 parking_api
 
 
 ## Solution Overview
+* The requirement "should support JSON over HTTP" has been satisfied to the fullest extent.  All requests and responses use JSON except for the rate query request.  For ease of use (e.g. sending request from a browser) the start and end parameters are passed as query parameters in a GET.
+* Note because of the presence of a '+' in some ISO datetimes this character must be escaped (replaced with '%2B').  Alternatively the entire datetime strings may be escaped.
 * Different timezones in the rate query are supported.  This case is tested in the unit tests.  If this were explicitly not a requirement a simpler approach would be to deny such queries.
 ### Django
 * I identified in the first interview I do not have Django experience.  I've taken this opportunity to learn the basics of Django and have used it for the web server framework.
@@ -98,8 +100,14 @@ curl "http://127.0.0.1:8000/parking_rates?start=2020-10-10T02:00:00-04:00&end=20
 # 925 in Eastern Time
 curl "http://127.0.0.1:8000/parking_rates?start=2020-10-11T05:00:00-04:00&end=2020-10-11T07:00:00-04:00"
 
-# Unavailable parking rate (+ symbol URL escaped)
+# Unavailable rate (+ symbol URL escaped)
 curl "http://127.0.0.1:8000/parking_rates?start=2015-07-04T07:00:00%2B05:00&end=2015-07-04T20:00:00%2B05:00"
+
+# Unavailable rate - Date range spanning multiple days
+curl "http://127.0.0.1:8000/parking_rates?start=2015-07-01T07:00:00-05:00&end=2015-07-02T12:00:00-05:00"
+
+# Unavailable rate - Date range spanning multiple rates
+curl "http://127.0.0.1:8000/parking_rates?start=2020-10-07T02:00:00-05:00&end=2020-10-07T18:00:00-05:00"
 
 # Invalid date
 curl "http://127.0.0.1:8000/parking_rates?start=2015-07-99T07:00:00-05:00&end=2015-07-01T12:00:00-05:00"
@@ -107,9 +115,6 @@ curl "http://127.0.0.1:8000/parking_rates?start=xxxx-07-01T07:00:00-05:00&end=20
 
 # Invalid time
 curl "http://127.0.0.1:8000/parking_rates?start=2015-07-01T25:00:00-05:00&end=2015-07-01T12:00:00-05:00"
-
-# Date range spanning multiple days
-curl "http://127.0.0.1:8000/parking_rates?start=2015-07-01T07:00:00-05:00&end=2015-07-02T12:00:00-05:00"
 
 # start time does not precede end time
 curl "http://127.0.0.1:8000/parking_rates?start=2015-07-03T07:00:00-05:00&end=2015-07-02T12:00:00-05:00"
