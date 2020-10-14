@@ -1,0 +1,111 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Parking Rates API
+  description: An API for querying parking rates for different date time ranges
+paths:
+  /park/query:
+    get:
+      description: Get price for the parking rate in the specified date time range.
+      parameters:
+        - name: start
+          in: query
+          description: Start date/time as ISO-8601 with timezones
+          schema:
+            type: string
+        - name: end
+          in: query
+          description: End date/time as ISO-8601 with timezones
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rate:
+                    type: integer
+                    example: 2000
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid start/end dates: Start time does not precede end time."
+        '503':
+          description: Parking rates not available to query
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Parking rates not yet loaded
+  /park/rates:
+    put:
+      description: Update new parking rates
+      requestBody:
+        content:
+          application/json:
+            example:
+              rates:
+                - days: "mon,tues,thurs"
+                  time: "0900-2100"
+                  tz: "America/Chicago"
+                  price: 1500
+      responses:
+        '201':
+          description: The initial parking rates successfully loaded (since server started)
+        '200':
+          description: Parking rates successfully updated
+        '400':
+          description: Rates JSON object passed is invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid field in rates: Invalid price -1750, must be a positive integer. Parking rates not updated."
+  /park/ready:
+    get:
+      description: Endpoint to test if API is available
+      responses:
+        '200':
+          description: Service is available
+  /park/health:
+    get:
+      description: Is the parking app healthy?
+      responses:
+        '200':
+          description: Service is healthy and able to process parking rate queries
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Healthy
+        '503':
+          description: Service is unhealthy and NOT able to process parking rate queries
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Unhealthy
+                  details:
+                    type: string
+                    example: parking rates not available
