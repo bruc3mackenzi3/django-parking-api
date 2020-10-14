@@ -35,7 +35,6 @@ class TestParkingRates:
         price = ParkingRates.get_rate_price(start_dt, end_dt)
         assert price == expected
 
-
     def _load_rates(self) -> None:
         with open(rates_file_path) as f:
             self.rates_dict = json.load(f)
@@ -65,8 +64,8 @@ class TestRate:
         rate = Rate('mon', '0900-2100', 'America/Chicago', 1500)
         start = datetime.fromisoformat('2020-10-12T12:00:00-04:00')
         end = datetime.fromisoformat('2020-10-12T18:00:00-04:00')
-        assert True == rate.time_span_in_rate(start, end)
 
+        assert True == rate.time_span_in_rate(start, end)
         assert False == rate.time_span_in_rate(start, end.replace(hour=23))
 
 

@@ -10,7 +10,6 @@ day_abbreviations = ["mon", "tues", "wed", "thurs", "fri", "sat", "sun"]
 
 
 class ParkingRates:
-
     rates = None
 
     @classmethod
@@ -142,6 +141,7 @@ class Rate:
             return False
 
         return True
+
 
 class TimeSpan:
     """
