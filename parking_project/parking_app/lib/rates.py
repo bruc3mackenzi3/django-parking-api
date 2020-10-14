@@ -41,10 +41,14 @@ class ParkingRates:
         Returns:
             The applicable rate, None if a rate is not available for the given
             time range.
+
+        Raises:
+            RuntimeError if get_rate_price is called before rates are
+            successfully loaded.
         """
 
         if cls.rates == None:
-            return None
+            raise RuntimeError("Rates must first be loaded with load_rates")
 
         for rate in cls.rates:
             if rate.time_span_in_rate(start, end):

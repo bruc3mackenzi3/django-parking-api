@@ -39,6 +39,8 @@ class ParkingView(View):
 
         price = ParkingRates.get_rate_price(start, end)
 
+        if price == None:
+            price = "unavailable"
         return JsonResponse({"rate": price})
 
     def put(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
