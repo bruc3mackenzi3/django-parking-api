@@ -1,8 +1,11 @@
 # django-parking-api
+A Django web server that exposes an API for injesting a parking rates document and processing queries on parking rates.
+
 
 ## Building and Running Locally
-This project is built using Pipenv.  Install Pipenv with the following command:
+Python 3.9 or later is required to run the web server.  If your system doesn't meet this requirement it can be [run with Docker](#Building-and-Running-with-Docker).
 
+This project is built using Pipenv.  Install Pipenv with the following command:
 ```
 pip install pipenv
 ```
@@ -16,6 +19,7 @@ To run the Django web server (default port is 8000):
 ```
 python manage.py runserver [port] [--noreload]
 ```
+
 
 ## Building and Running with Docker
 Run commands from project root folder.
@@ -31,34 +35,13 @@ docker run -it -p 8000:8000 parking_api
 ```
 
 
-## Project Setup
-Create Django project (run from project root folder):
-```
-django-admin startproject parking_project
-```
-Note: This creates nested folders both named `parking_project`
-
-Setup project Database (run from _outer_ parking_project/ folder):
-```
-python manage.py migrate
-```
-
-Create Django app (run from _outer_ parking_project/ folder):
-```
-python manage.py startapp parking_app [port] [--noreload]
-```
-
-Generate requirements.txt
-```
-pipenv lock -r > requirements-pipenv.txt
-```
-
 ## Solution Overview
 * Different timezones in the rate query are supported.  This case is tested in the unit tests.  If this were explicitly not a requirement a simpler approach would be to deny such queries.
 ### Django
 * I identified in the first interview I do not have Django experience.  I've taken this opportunity to learn the basics of Django and have used it for the web server framework.
 * Django features I've made use of include the `LOGGING` config, disabling CSRF to allow PUT requests in `settings.py`.
 * For simplicity the backend libraries are called directly by `views.py`.  This is done for simplicity and because there is no data model or database.
+
 
 ## Testing
 
@@ -69,7 +52,7 @@ PYTHONPATH=. pytest
 ```
 
 ### API Tests
-Manual test cases are provided for testing the API itself.  A variety of cases are provided for both expected and erroroneous behaviour.
+Manual test cases are provided for testing the API itself.  A variety of cases are provided for both expected and erroroneous behaviour, with the expected result in the comment.
 
 #### PUT rates
 ```bash
@@ -124,4 +107,28 @@ curl "http://127.0.0.1:8000/parking_rates?start=2015-07-03T07:00:00-05:00&end=20
 
 # Outside range by 1 minute
 curl "http://127.0.0.1:8000/parking_rates?start=2020-10-10T02:00:00-04:00&end=2020-10-10T06:01:00-04:00"
+```
+
+
+## Developing
+### Project Setup
+Create Django project (run from project root folder):
+```
+django-admin startproject parking_project
+```
+Note: This creates nested folders both named `parking_project`
+
+Setup project Database (run from _outer_ parking_project/ folder):
+```
+python manage.py migrate
+```
+
+Create Django app (run from _outer_ parking_project/ folder):
+```
+python manage.py startapp parking_app [port] [--noreload]
+```
+
+Generate requirements.txt
+```
+pipenv lock -r > requirements-pipenv.txt
 ```

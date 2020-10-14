@@ -129,30 +129,35 @@ class TimeSpan:
 
     Args:
         span: Time span represented with format: "0900-2100"
+
+    Raises:
+        ValueError if span is not a valid time span.
     """
 
     format = "%H%M"
 
     def __init__(self, span: str):
-        self.start, self.end = span.split("-")  # Todo: test bad
+        self.start, self.end = span.split("-")
+        if self.start >= self.end:
+            raise ValueError(f"Start time {self.start} does not suceed end time {self.end}")
 
     @property
-    def start(self):
+    def start(self) -> time:
         return self._start
 
     @start.setter
-    def start(self, value: str):
+    def start(self, value: str) -> None:
         self._start = self._parse_time(value)  # Todo: test invalid time
 
     @property
-    def end(self):
+    def end(self) -> time:
         return self._end
 
     @end.setter
-    def end(self, value: str):
+    def end(self, value: str) -> None:
         self._end = self._parse_time(value)
 
-    def _parse_time(self, value: str):
+    def _parse_time(self, value: str) -> time:
         return datetime.strptime(value, self.format).time()
 
     def in_time_span(self, start: time, end: time) -> bool:
