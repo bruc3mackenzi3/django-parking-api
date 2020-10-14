@@ -34,7 +34,25 @@ def validate_get_parking(start: str, end: str) -> Tuple[datetime, datetime]:
 
 def validate_put_parking(body: str) -> dict:
     """
+    Validates the parking rates string passed from the client is a) valid JSON
+    and b) a valid rates object.
+
+    NOTE: This function is incomplete
+
+    Args:
+        body: The request body which, if valid, contains a JSON string
+            representing the rates object
+
+    Returns:
+        The rates object as a dictionary.
+
+    Raises:
+        ValueError if the passed string is invalid
     """
 
-    rates = json.loads(body)
-    return rates
+    try:
+        rates = json.loads(body)
+    except json.JSONDecodeError as e:
+        raise ValueError from e
+    else:
+        return rates

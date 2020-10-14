@@ -68,6 +68,9 @@ class Rate:
         timezone: Timezone rate applies to.  Specified in format "America/Chicago".
         price: Price for this rate during specified times, specified in cents,
             e.g. 925.
+
+    Raises:
+        ValueError if any fields contain invalid data
     """
 
     def __init__(self, days: str, times: str, timezone: str, price: int):

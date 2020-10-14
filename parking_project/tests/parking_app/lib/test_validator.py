@@ -38,5 +38,16 @@ def test_validate_get_parking_invalid(start, end):
 
 
 def test_validate_put_parking():
-    #rates = json.load(open(rates_file_path))
-    validator.validate_put_parking(open(rates_file_path).read())
+    rates_str = open(rates_file_path).read()
+    rates_dict = validator.validate_put_parking(rates_str)
+    assert json.loads(rates_str) == rates_dict
+
+
+@pytest.mark.parametrize('bad_json', [
+    '',
+    'invalid json',
+    '{ "rates": [ { "days":'
+])
+def test_validate_put_parking_invalid(bad_json):
+    with pytest.raises(ValueError):
+        validator.validate_put_parking(bad_json)
