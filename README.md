@@ -64,6 +64,15 @@ curl -X PUT -d '{"rates": [{"days": "wed", "times": "0600-1800", "tz": "America/
 
 # Invalid day
 curl -X PUT -d '{"rates": [{"days": "wedn", "times": "0600-1800", "tz": "America/Chicago", "price": 1750}]}'  "http://127.0.0.1:8000/parking_rates"
+
+# Invalid time
+curl -X PUT -d '{"rates": [{"days": "wed", "times": "xxxx-1800", "tz": "America/Chicago", "price": 1750}]}'  "http://127.0.0.1:8000/parking_rates"
+
+# Invalid timezone
+curl -X PUT -d '{"rates": [{"days": "wed", "times": "0600-1800", "tz": "America/Scranton", "price": 1750}]}'  "http://127.0.0.1:8000/parking_rates"
+
+# Invalid price
+curl -X PUT -d '{"rates": [{"days": "wed", "times": "0600-1800", "tz": "America/Chicago", "price": -1750}]}'  "http://127.0.0.1:8000/parking_rates"
 ```
 
 #### GET rates

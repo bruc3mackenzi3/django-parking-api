@@ -74,8 +74,14 @@ class Rate:
 
     def __init__(self, days: str, times: str, timezone: str, price: int):
         self.days = days
+
         self.time_span = TimeSpan(times)
-        self.timezone = pytz.timezone(timezone)  # Todo: Validate
+
+        try:
+            self.timezone = pytz.timezone(timezone)
+        except Exception as e:
+            raise ValueError from e
+
         self.price = price
 
     @property
@@ -89,6 +95,16 @@ class Rate:
             if day not in day_abbreviations:
                 raise ValueError(f"Day is not a valid day abbreviation: {day}")
         self._days = fields
+
+    @property
+    def price(self) -> str:
+        return self._price
+
+    @price.setter
+    def price(self, value: int) -> None:
+        if type(value) != int or value < 0:
+            raise ValueError(f'Invalid price {value}, must be a positive integer')
+        self._price = value
 
     def time_span_in_rate(self, start: datetime, end: datetime) -> bool:
         """

@@ -53,7 +53,7 @@ class ParkingView(View):
         except Exception as e:
             self.logger.error(f"Failed to load request body: {e}")
             return JsonResponse(
-                    {"error": f"Invalid JSON in body: {e}"},
+                    {"error": f"Invalid JSON in body: {e}. Parking rates not updated."},
                     status=400
             )
 
@@ -62,7 +62,7 @@ class ParkingView(View):
         except Exception as e:
             self.logger.error(f"Error loading rates objects: {e}")
             return JsonResponse(
-                    {"error": f"Invalid field in rates: {e}"},
+                    {"error": f"Invalid field in rates: {e}. Parking rates not updated."},
                     status=400
             )
 
