@@ -1,9 +1,8 @@
 from datetime import datetime
 import json
-from typing import Tuple
 
 
-def validate_get_parking(start: str, end: str) -> Tuple[datetime, datetime]:
+def validate_get_parking(start: str, end: str) -> tuple[datetime, datetime]:
     """
     Validates the input parameters and returns the parsed result.
 
@@ -12,7 +11,7 @@ def validate_get_parking(start: str, end: str) -> Tuple[datetime, datetime]:
         end: End time as a datetime string
 
     Returns:
-        A 2-Tuple containing start and end datetime objects
+        A 2-tuple containing start and end datetime objects
 
     Raises:
         ValueError if start or end is not a valid datetime string in ISO-8061

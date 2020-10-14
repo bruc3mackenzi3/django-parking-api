@@ -1,7 +1,6 @@
 import calendar
 from datetime import datetime, time
 import logging
-from typing import List
 
 import pytz
 
@@ -80,7 +79,7 @@ class Rate:
         self.price = price
 
     @property
-    def days(self) -> List[str]:
+    def days(self) -> list[str]:
         return self._days
 
     @days.setter
