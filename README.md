@@ -15,7 +15,14 @@ Build project with the command:
 pipenv sync --dev
 ```
 
-To run the Django web server (default port is 8000):
+Alternatively the project can be built with virtualenv and pip:
+```
+virtualenv env
+source env/bin/activate
+pip install -r requirements-dev.txt
+```
+
+To run the Django web server run this command from `parking_project/` (default port is 8000):
 ```
 python manage.py runserver [port] [--noreload]
 ```
@@ -36,9 +43,10 @@ docker run -it -p 8000:8000 parking_api
 
 
 ## Solution Overview
-* The requirement "should support JSON over HTTP" has been satisfied to the fullest extent.  All requests and responses use JSON except for the rate query request.  For ease of use (e.g. sending request from a browser) the start and end parameters are passed as query parameters in a GET.
+* The requirement "should support JSON over HTTP" has been satisfied to the greatest extent possible.  All requests and responses use JSON except for the rate query request.  For ease of use (e.g. sending request from a browser) the start and end parameters are passed as query parameters in a GET.
 * Note because of the presence of a '+' in some ISO datetimes this character must be escaped (replaced with '%2B').  Alternatively the entire datetime strings may be escaped.
 * Different timezones in the rate query are supported.  This case is tested in the unit tests.  If this were explicitly not a requirement a simpler approach to deny such queries would be taken.
+* The API is intended to be RESTful.  This includes use of appropriate HTTP methods and status codes.  Note PUT is used (rather than POST) because each action is considered an update to existing data rather creating new data.
 ### Django
 * I identified in the first interview I do not have Django experience.  I've taken this opportunity to learn the basics of Django and have used it for the web server framework.
 * Django features I've made use of include the `LOGGING` config, disabling CSRF to allow PUT requests in `settings.py`.
@@ -48,13 +56,15 @@ docker run -it -p 8000:8000 parking_api
 ## Testing
 
 ### Unit Tests
-To run unit tests, execute following command from `parking_project/` directory:
+Unit tests are implemented for the backend modules, `rates.py` and `views.py`.
+
+To run unit tests, execute following command from `parking_project/` directory.  Note dev dependencies must be installed.
 ```bash
 PYTHONPATH=. pytest
 ```
 
 ### API Tests
-Manual test cases are provided for testing the API itself.  A variety of cases are provided for both expected and erroroneous behaviour, with the expected result in the comment.
+Manual test cases are provided for testing the API as a whole.  Unlike unit tests these end-user, functional tests execute the entire stack including the Django request handlers and the web server itself.  A variety of cases are provided for both expected and erroroneous behaviour, with the expected result in the comment.
 
 #### PUT rates
 ```bash
