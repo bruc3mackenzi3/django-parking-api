@@ -1,8 +1,9 @@
 from django.urls import path
 
-from . import views
+from .views import ParkingQueryView, ParkingRatesView, health
 
 urlpatterns = [
-    path('', views.ParkingView.as_view(), name='parking'),
-    path('health', views.health, name='health')
+    path('query', ParkingQueryView.as_view(), name='parking_query'),
+    path('rates', ParkingRatesView.as_view(), name='parking_rates'),
+    path('health', health, name='health')
 ]

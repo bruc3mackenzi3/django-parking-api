@@ -7,11 +7,11 @@ from parking_app.lib.rates import ParkingRates
 from parking_app.lib.validator import validate_get_parking, validate_put_parking
 
 
-class ParkingView(View):
+class ParkingQueryView(View):
 
     def __init__(self, *args, **kwargs):
-        self.logger = logging.getLogger(ParkingView.__name__)
-        super(ParkingView, self).__init__(*args, **kwargs)
+        self.logger = logging.getLogger(ParkingQueryView.__name__)
+        super(ParkingQueryView, self).__init__(*args, **kwargs)
 
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         if not ParkingRates.rates_loaded():
@@ -43,6 +43,12 @@ class ParkingView(View):
             price = "unavailable"
         return JsonResponse({"rate": price})
 
+
+class ParkingRatesView(View):
+
+    def __init__(self, *args, **kwargs):
+        self.logger = logging.getLogger(ParkingRatesView.__name__)
+        super(ParkingRatesView, self).__init__(*args, **kwargs)
     def put(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         # Return 201 if data has not been set, 200 otherwise
         if not ParkingRates.rates_loaded():

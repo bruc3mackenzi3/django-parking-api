@@ -69,68 +69,68 @@ Manual test cases are provided for testing the API as a whole.  Unlike unit test
 #### PUT rates
 ```bash
 # Load from valid rates file
-curl -X PUT -H "Content-Type: application/json" -d @parking_app/data/rates.json  "http://127.0.0.1:8000/parking_rates"
+curl -X PUT -H "Content-Type: application/json" -d @parking_app/data/rates.json  "http://127.0.0.1:8000/park/rates"
 
 # JSON with single rate
-curl -X PUT -d '{"rates": [{"days": "wed", "times": "0600-1800", "tz": "America/Chicago", "price": 1750}]}'  "http://127.0.0.1:8000/parking_rates"
+curl -X PUT -d '{"rates": [{"days": "wed", "times": "0600-1800", "tz": "America/Chicago", "price": 1750}]}'  "http://127.0.0.1:8000/park/rates"
 
 # Invalid day
-curl -X PUT -d '{"rates": [{"days": "wedn", "times": "0600-1800", "tz": "America/Chicago", "price": 1750}]}'  "http://127.0.0.1:8000/parking_rates"
+curl -X PUT -d '{"rates": [{"days": "wedn", "times": "0600-1800", "tz": "America/Chicago", "price": 1750}]}'  "http://127.0.0.1:8000/park/rates"
 
 # Invalid time
-curl -X PUT -d '{"rates": [{"days": "wed", "times": "xxxx-1800", "tz": "America/Chicago", "price": 1750}]}'  "http://127.0.0.1:8000/parking_rates"
+curl -X PUT -d '{"rates": [{"days": "wed", "times": "xxxx-1800", "tz": "America/Chicago", "price": 1750}]}'  "http://127.0.0.1:8000/park/rates"
 
 # Invalid timezone
-curl -X PUT -d '{"rates": [{"days": "wed", "times": "0600-1800", "tz": "America/Scranton", "price": 1750}]}'  "http://127.0.0.1:8000/parking_rates"
+curl -X PUT -d '{"rates": [{"days": "wed", "times": "0600-1800", "tz": "America/Scranton", "price": 1750}]}'  "http://127.0.0.1:8000/park/rates"
 
 # Invalid price
-curl -X PUT -d '{"rates": [{"days": "wed", "times": "0600-1800", "tz": "America/Chicago", "price": -1750}]}'  "http://127.0.0.1:8000/parking_rates"
+curl -X PUT -d '{"rates": [{"days": "wed", "times": "0600-1800", "tz": "America/Chicago", "price": -1750}]}'  "http://127.0.0.1:8000/park/rates"
 ```
 
 #### GET rates
 ```bash
 # 1750 parking rate
-curl "http://127.0.0.1:8000/parking_rates?start=2015-07-01T07:00:00-05:00&end=2015-07-01T12:00:00-05:00"
+curl "http://127.0.0.1:8000/park/query?start=2015-07-01T07:00:00-05:00&end=2015-07-01T12:00:00-05:00"
 
 # 2000 parking rate (+ symbol URL escaped)
-curl "http://127.0.0.1:8000/parking_rates?start=2015-07-04T15:00:00%2B00:00&end=2015-07-04T20:00:00%2B00:00"
+curl "http://127.0.0.1:8000/park/query?start=2015-07-04T15:00:00%2B00:00&end=2015-07-04T20:00:00%2B00:00"
 
 # 1500 in Eastern Time
-curl "http://127.0.0.1:8000/parking_rates?start=2020-10-08T12:00:00-04:00&end=2020-10-08T18:00:00-04:00"
+curl "http://127.0.0.1:8000/park/query?start=2020-10-08T12:00:00-04:00&end=2020-10-08T18:00:00-04:00"
 
 # 2000 in Eastern Time
-curl "http://127.0.0.1:8000/parking_rates?start=2020-10-09T12:00:00-04:00&end=2020-10-09T18:00:00-04:00"
+curl "http://127.0.0.1:8000/park/query?start=2020-10-09T12:00:00-04:00&end=2020-10-09T18:00:00-04:00"
 
 # 1750 in Eastern Time
-curl "http://127.0.0.1:8000/parking_rates?start=2020-10-07T12:00:00-04:00&end=2020-10-07T18:00:00-04:00"
+curl "http://127.0.0.1:8000/park/query?start=2020-10-07T12:00:00-04:00&end=2020-10-07T18:00:00-04:00"
 
 # 1000 in Eastern Time
-curl "http://127.0.0.1:8000/parking_rates?start=2020-10-10T02:00:00-04:00&end=2020-10-10T06:00:00-04:00"
+curl "http://127.0.0.1:8000/park/query?start=2020-10-10T02:00:00-04:00&end=2020-10-10T06:00:00-04:00"
 
 # 925 in Eastern Time
-curl "http://127.0.0.1:8000/parking_rates?start=2020-10-11T05:00:00-04:00&end=2020-10-11T07:00:00-04:00"
+curl "http://127.0.0.1:8000/park/query?start=2020-10-11T05:00:00-04:00&end=2020-10-11T07:00:00-04:00"
 
 # Unavailable rate (+ symbol URL escaped)
-curl "http://127.0.0.1:8000/parking_rates?start=2015-07-04T07:00:00%2B05:00&end=2015-07-04T20:00:00%2B05:00"
+curl "http://127.0.0.1:8000/park/query?start=2015-07-04T07:00:00%2B05:00&end=2015-07-04T20:00:00%2B05:00"
 
 # Unavailable rate - Date range spanning multiple days
-curl "http://127.0.0.1:8000/parking_rates?start=2015-07-01T07:00:00-05:00&end=2015-07-02T12:00:00-05:00"
+curl "http://127.0.0.1:8000/park/query?start=2015-07-01T07:00:00-05:00&end=2015-07-02T12:00:00-05:00"
 
 # Unavailable rate - Date range spanning multiple rates
-curl "http://127.0.0.1:8000/parking_rates?start=2020-10-07T02:00:00-05:00&end=2020-10-07T18:00:00-05:00"
+curl "http://127.0.0.1:8000/park/query?start=2020-10-07T02:00:00-05:00&end=2020-10-07T18:00:00-05:00"
 
 # Invalid date
-curl "http://127.0.0.1:8000/parking_rates?start=2015-07-99T07:00:00-05:00&end=2015-07-01T12:00:00-05:00"
-curl "http://127.0.0.1:8000/parking_rates?start=xxxx-07-01T07:00:00-05:00&end=2015-07-01T12:00:00-05:00"
+curl "http://127.0.0.1:8000/park/query?start=2015-07-99T07:00:00-05:00&end=2015-07-01T12:00:00-05:00"
+curl "http://127.0.0.1:8000/park/query?start=xxxx-07-01T07:00:00-05:00&end=2015-07-01T12:00:00-05:00"
 
 # Invalid time
-curl "http://127.0.0.1:8000/parking_rates?start=2015-07-01T25:00:00-05:00&end=2015-07-01T12:00:00-05:00"
+curl "http://127.0.0.1:8000/park/query?start=2015-07-01T25:00:00-05:00&end=2015-07-01T12:00:00-05:00"
 
 # start time does not precede end time
-curl "http://127.0.0.1:8000/parking_rates?start=2015-07-03T07:00:00-05:00&end=2015-07-02T12:00:00-05:00"
+curl "http://127.0.0.1:8000/park/query?start=2015-07-03T07:00:00-05:00&end=2015-07-02T12:00:00-05:00"
 
 # Outside range by 1 minute
-curl "http://127.0.0.1:8000/parking_rates?start=2020-10-10T02:00:00-04:00&end=2020-10-10T06:01:00-04:00"
+curl "http://127.0.0.1:8000/park/query?start=2020-10-10T02:00:00-04:00&end=2020-10-10T06:01:00-04:00"
 ```
 
 
