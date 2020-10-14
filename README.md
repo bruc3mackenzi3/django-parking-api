@@ -24,7 +24,7 @@ pip install -r requirements-dev.txt
 
 To run the Django web server run this command from `parking_project/` (default port is 8000):
 ```
-python manage.py runserver [port] [--noreload]
+[pipenv run] python manage.py runserver [port] [--noreload]
 ```
 
 
@@ -45,11 +45,23 @@ docker run -it -p 8000:8000 parking_api
 ## Accessing the API
 Published endpoints are documented in the included OpenAPI / Swagger Specification.  A visual representation can be viewed [here](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/bruc3mackenzi3/django-parking-api/main/swagger.yaml).
 
-Example queries are provided below in the [API Tests](#API-Tests) section.
+To load the example parking rates provided run the following curl command from `parking_project/`:
+
+```bash
+curl -X PUT -H "Content-Type: application/json" -d @parking_app/data/rates.json  "http://127.0.0.1:8000/park/rates"
+```
+
+The loaded parking rates can be queried with this request:
+```bash
+curl "http://127.0.0.1:8000/park/query?start=2015-07-01T07:00:00-05:00&end=2015-07-01T12:00:00-05:00"
+```
+
+Additional example queries are provided below in the [API Tests](#API-Tests) section.
 
 
 ## Solution Overview
-* The requirement "should support JSON over HTTP" has been satisfied to the greatest extent possible.  All requests and responses use JSON except for the rate query request.  For ease of use (e.g. sending request from a browser) the start and end parameters are passed as query parameters in a GET.
+* The parking rates are not automatically loaded on startup.  They are manually loaded by sending to the `/park/rates` endpoint.
+* The requirement "should support JSON over HTTP" has been satisfied to the greatest extent possible.  For consistency all requests and responses use JSON except for the rate query request.  For ease of use (e.g. sending request from a browser) the start and end parameters are passed as query parameters in a GET.
 * Note because of the presence of a '+' in some ISO datetimes this character must be escaped (replaced with '%2B').  Alternatively the entire datetime strings may be escaped.
 * Different timezones in the rate query are supported.  This case is tested in the unit tests.  If this were explicitly not a requirement a simpler approach to deny such queries might be favourable.
 * The API is intended to be RESTful.  This includes use of appropriate HTTP methods and status codes.  Note for setting the rates in the server PUT is used (rather than POST) because each action is considered an update to existing data rather creating new data.
