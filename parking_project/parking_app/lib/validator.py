@@ -15,14 +15,17 @@ def validate_get_parking(start: str, end: str) -> tuple[datetime, datetime]:
 
     Raises:
         ValueError if start or end is not a valid datetime string in ISO-8061
-        format.
+        format or does not include timezone info.
     """
 
     start_datetime = datetime.fromisoformat(start)
     end_datetime = datetime.fromisoformat(end)
 
+    if None in (start_datetime.tzinfo, end_datetime.tzinfo):
+        raise ValueError("Timezone must be specified.")
+
     if start_datetime >= end_datetime:
-        raise ValueError(f"start time does not precede end time.")
+        raise ValueError(f"Start time does not precede end time.")
 
     return (start_datetime, end_datetime)
 
