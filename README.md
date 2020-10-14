@@ -2,7 +2,7 @@
 A Django web server that exposes an API for injesting a parking rates document and processing queries for the parking rate during a given time span.
 
 
-## Building and Running Locally
+## Build and Run Locally
 Python 3.9 or later is required to run the web server.  If your system doesn't meet this requirement it can be [run with Docker](#Building-and-Running-with-Docker).
 
 This project is built using Pipenv.  Install Pipenv with the following command:
@@ -28,7 +28,7 @@ To run the Django web server run this command from `parking_project/` (default p
 ```
 
 
-## Building and Running with Docker
+## Build and Run with Docker
 Run commands from project root folder.
 
 To build the container image:
@@ -61,24 +61,25 @@ Additional example queries are provided below in the [API Tests](#API-Tests) sec
 
 ## Solution Overview
 * The parking rates are not automatically loaded on startup.  They are manually loaded by sending to the `/park/rates` endpoint.
-* The requirement "should support JSON over HTTP" has been satisfied to the greatest extent possible.  For consistency all requests and responses use JSON except for the rate query request.  For ease of use (e.g. sending request from a browser) the start and end parameters are passed as query parameters in a GET.
-* Note because of the presence of a '+' in some ISO datetimes this character must be escaped (replaced with '%2B').  Alternatively the entire datetime strings may be escaped.
-* Different timezones in the rate query are supported.  This case is tested in the unit tests.  If this were explicitly not a requirement a simpler approach to deny such queries might be favourable.
+* The requirement _should support JSON over HTTP_ has been satisfied to the greatest extent possible.  For consistency all requests and responses use JSON except for the rate query request.  For ease of use (e.g. sending request from a browser) the start and end parameters are passed as query parameters in a GET.
+* Note because of the presence of a `+` in some ISO datetimes this character must be escaped in requests (replaced with `%2B`).  Alternatively the entire datetime strings may be escaped.
+* Different timezones in a given rate query are supported.  This case is tested in the unit tests.  If this were explicitly not a requirement a simpler approach to deny such queries might be favourable.
 * The API is intended to be RESTful.  This includes use of appropriate HTTP methods and status codes.  Note for setting the rates in the server PUT is used (rather than POST) because each action is considered an update to existing data rather creating new data.
 
 ### Django
 * I identified in the first interview I do not have Django experience.  I've taken this assignment as an opportunity to demonstrate my ability to learn a new framework.
-* Django features I've made use of include the `LOGGING` config, disabling CSRF to allow PUT requests in `settings.py`.
+* Django features I've made use of include the `LOGGING` config and disabling CSRF to allow PUT requests in `settings.py`.
+* In addition views are implemented with View subclasses and their respective HTTP methods to enforce use of correct methods.
 * For simplicity the backend libraries are called directly by `views.py`.  This is done for simplicity and because there is no data model or database.
 
 
 ## Testing
 
 ### Unit Tests
-Unit tests are implemented for the backend modules, `rates.py` and `views.py`.
+Unit tests are implemented for the backend modules `rates.py` and `views.py`.
 
-To run unit tests, execute following command from `parking_project/` directory.  Note dev dependencies must be installed.
-```bash
+To run unit tests, execute following command from `parking_project/` directory.  Note dev dependencies must be installed and virtual environment activated.
+```
 PYTHONPATH=. pytest
 ```
 
@@ -86,7 +87,7 @@ PYTHONPATH=. pytest
 Manual test cases are provided for testing the API as a whole.  Unlike unit tests these end-user, functional tests execute the entire stack including the Django request handlers and the web server itself.  A variety of cases are provided for both expected and erroroneous behaviour, with the expected result in the comment.
 
 #### Set and Update Parking Rates
-```bash
+```sh
 # Load from valid rates file
 curl -X PUT -H "Content-Type: application/json" -d @parking_app/data/rates.json  "http://127.0.0.1:8000/park/rates"
 
@@ -153,7 +154,7 @@ curl "http://127.0.0.1:8000/park/query?start=2020-10-10T02:00:00-04:00&end=2020-
 ```
 
 
-## Developing
+## Development
 ### Project Setup
 Create Django project (run from project root folder):
 ```
