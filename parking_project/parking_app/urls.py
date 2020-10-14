@@ -1,9 +1,11 @@
 from django.urls import path
 
-from .views import ParkingQueryView, ParkingRatesView, health
+from . import views
+from .views import ParkingQueryView, ParkingRatesView
 
 urlpatterns = [
     path('query', ParkingQueryView.as_view(), name='parking_query'),
     path('rates', ParkingRatesView.as_view(), name='parking_rates'),
-    path('health', health, name='health')
+    path('ready', views.ready, name='ready'),
+    path('health', views.health, name='health')
 ]

@@ -77,5 +77,15 @@ class ParkingRatesView(View):
         return HttpResponse("", status=return_status)
 
 
+def ready(request: HttpRequest) -> HttpResponse:
+    return HttpResponse("OK")
+
+
 def health(request: HttpRequest) -> HttpResponse:
-    return HttpResponse("I'm alive!")
+    if ParkingRates.rates_loaded():
+        return JsonResponse({"status": "Healthy"}, status=200)
+    else:
+        return JsonResponse(
+                {"status": "Unhealthy", "details": "parking rates not available"},
+                status=503
+        )
