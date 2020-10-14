@@ -10,14 +10,16 @@ paths:
       parameters:
         - name: start
           in: query
-          description: Start date/time as ISO-8601 with timezones
+          description: Start date/time as ISO-8601 with timezones.  Special characters must be URL escaped.
           schema:
             type: string
+            example: "2015-07-01T07:00:00-05:00"
         - name: end
           in: query
-          description: End date/time as ISO-8601 with timezones
+          description: End date/time as ISO-8601 with timezones.  Special characters must be URL escaped.
           schema:
             type: string
+            example: "2015-07-01T12:00:00-05:00"
       responses:
         '200':
           description: OK

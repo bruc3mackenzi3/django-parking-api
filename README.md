@@ -42,13 +42,20 @@ docker run -it -p 8000:8000 parking_api
 ```
 
 
+## Accessing the API
+Published endpoints are documented in the included OpenAPI / Swagger Specification.  A visual representation can be viewed [here](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/bruc3mackenzi3/django-parking-api/main/swagger.yaml).
+
+Example queries are provided below in the [API Tests](#API-Tests) section.
+
+
 ## Solution Overview
 * The requirement "should support JSON over HTTP" has been satisfied to the greatest extent possible.  All requests and responses use JSON except for the rate query request.  For ease of use (e.g. sending request from a browser) the start and end parameters are passed as query parameters in a GET.
 * Note because of the presence of a '+' in some ISO datetimes this character must be escaped (replaced with '%2B').  Alternatively the entire datetime strings may be escaped.
-* Different timezones in the rate query are supported.  This case is tested in the unit tests.  If this were explicitly not a requirement a simpler approach to deny such queries would be taken.
-* The API is intended to be RESTful.  This includes use of appropriate HTTP methods and status codes.  Note PUT is used (rather than POST) because each action is considered an update to existing data rather creating new data.
+* Different timezones in the rate query are supported.  This case is tested in the unit tests.  If this were explicitly not a requirement a simpler approach to deny such queries might be favourable.
+* The API is intended to be RESTful.  This includes use of appropriate HTTP methods and status codes.  Note for setting the rates in the server PUT is used (rather than POST) because each action is considered an update to existing data rather creating new data.
+
 ### Django
-* I identified in the first interview I do not have Django experience.  I've taken this opportunity to learn the basics of Django and have used it for the web server framework.
+* I identified in the first interview I do not have Django experience.  I've taken this assignment as an opportunity to demonstrate my ability to learn a new framework.
 * Django features I've made use of include the `LOGGING` config, disabling CSRF to allow PUT requests in `settings.py`.
 * For simplicity the backend libraries are called directly by `views.py`.  This is done for simplicity and because there is no data model or database.
 
@@ -66,7 +73,7 @@ PYTHONPATH=. pytest
 ### API Tests
 Manual test cases are provided for testing the API as a whole.  Unlike unit tests these end-user, functional tests execute the entire stack including the Django request handlers and the web server itself.  A variety of cases are provided for both expected and erroroneous behaviour, with the expected result in the comment.
 
-#### PUT rates
+#### Set and Update Parking Rates
 ```bash
 # Load from valid rates file
 curl -X PUT -H "Content-Type: application/json" -d @parking_app/data/rates.json  "http://127.0.0.1:8000/park/rates"
@@ -87,7 +94,7 @@ curl -X PUT -d '{"rates": [{"days": "wed", "times": "0600-1800", "tz": "America/
 curl -X PUT -d '{"rates": [{"days": "wed", "times": "0600-1800", "tz": "America/Chicago", "price": -1750}]}'  "http://127.0.0.1:8000/park/rates"
 ```
 
-#### GET rates
+#### Query Parking Rate Prices
 ```bash
 # 1750 parking rate
 curl "http://127.0.0.1:8000/park/query?start=2015-07-01T07:00:00-05:00&end=2015-07-01T12:00:00-05:00"
