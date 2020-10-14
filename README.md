@@ -1,5 +1,5 @@
 # django-parking-api
-A Django web server that exposes an API for injesting a parking rates document and processing queries on parking rates.
+A Django web server that exposes an API for injesting a parking rates document and processing queries for the parking rate during a given time span.
 
 
 ## Building and Running Locally
@@ -38,7 +38,7 @@ docker run -it -p 8000:8000 parking_api
 ## Solution Overview
 * The requirement "should support JSON over HTTP" has been satisfied to the fullest extent.  All requests and responses use JSON except for the rate query request.  For ease of use (e.g. sending request from a browser) the start and end parameters are passed as query parameters in a GET.
 * Note because of the presence of a '+' in some ISO datetimes this character must be escaped (replaced with '%2B').  Alternatively the entire datetime strings may be escaped.
-* Different timezones in the rate query are supported.  This case is tested in the unit tests.  If this were explicitly not a requirement a simpler approach would be to deny such queries.
+* Different timezones in the rate query are supported.  This case is tested in the unit tests.  If this were explicitly not a requirement a simpler approach to deny such queries would be taken.
 ### Django
 * I identified in the first interview I do not have Django experience.  I've taken this opportunity to learn the basics of Django and have used it for the web server framework.
 * Django features I've made use of include the `LOGGING` config, disabling CSRF to allow PUT requests in `settings.py`.
