@@ -1,0 +1,28 @@
+{
+   "rates": [
+    {
+      "days": "wed",
+      "times": "1200-1700",
+      "tz": "America/Chicago",
+      "price": 1000
+    }
+    {
+      "days": "thurs",
+      "times": "1200-1700",
+      "tz": "America/Chicago",
+      "price": 1000
+    },
+       {
+           "days": "wed",
+           "times": "1700-2100",
+           "tz": "America/Chicago",
+           "price": 500
+       },
+       {
+           "days": "wed",
+           "times": "2200-2300",
+           "tz": "America/Chicago",
+           "price": 900
+       }
+   ]
+}

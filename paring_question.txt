@@ -1,0 +1,37 @@
+We’d like to update the requirements for searching for rates. Rather than a rate needing to encompass the full search period, we can return a valid rate as long as the start time and end time each fall within a rate period. If the start and end times fall within different rate periods, the rate prices are summed together and returned to the user.
+
+Configured Rates
+12pm-5pm: $10
+5pm-9pm: $5
+10pm-11pm: $9
+
+Example Searches
+1pm-3pm: $10
+10am-1pm: unavailable
+1pm-8pm: $15
+9am-11am: unavailable
+5pm-11pm: unavailable
+
+Sample JSON
+{
+   "rates": [
+       {
+           "days": "wed",
+           "times": "1200-1700",
+           "tz": "America/Chicago",
+           "price": 1000,
+       },
+       {
+           "days": "wed",
+           "times": "1700-2100",
+           "tz": "America/Chicago",
+           "price": 500,
+       },
+       {
+           "days": "wed",
+           "times": "2200-2300",
+           "tz": "America/Chicago",
+           "price": 900,
+       }
+   ]
+}
